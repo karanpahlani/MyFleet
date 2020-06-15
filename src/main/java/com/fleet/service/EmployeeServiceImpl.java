@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import com.fleet.exception.EmployeeNotFoundException;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +37,13 @@ public class EmployeeServiceImpl implements  EmployeeService{
     }
 
     @Override
+    @Transactional
     public Employee create(Employee employee) {
         return null;
     }
 
     @Override
+    @Transactional
     public Employee update(String id, Employee employee) {
         return null;
     }
