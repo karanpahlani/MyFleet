@@ -2,7 +2,8 @@ package com.fleet;
 
 /// public static void main  ///
 
-import jdk.internal.jline.internal.Nullable;
+
+import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer{
