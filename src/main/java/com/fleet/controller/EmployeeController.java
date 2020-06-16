@@ -32,7 +32,7 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.POST)
     public Employee create(@RequestBody Employee employee){
-        return employee;
+        return service.create(employee);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "{id}")

@@ -2,6 +2,7 @@ package com.fleet.service;
 
 
 import com.fleet.entity.Employee;
+import com.fleet.exception.EmployeeAlreadyExists;
 import com.fleet.exception.EmployeeNotFoundException;
 import com.fleet.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,13 @@ public class EmployeeServiceImpl implements  EmployeeService{
 
     @Transactional
     public Employee create(Employee employee) {
-        return null;
+        List<Employee> existing = repository.findByEmail(employee.getEmail());
+        System.out.println("our results: " + existing );
+        if (existing.size() != 0){
+            System.out.println("exception time!");
+            throw new EmployeeAlreadyExists("Employee with email"+  employee.getEmail() + "already exists: "  );
+        }
+        return repository.create(employee);
     }
 
 
