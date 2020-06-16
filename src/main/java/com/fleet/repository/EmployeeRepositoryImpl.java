@@ -1,9 +1,7 @@
 package com.fleet.repository;
 
 import com.fleet.entity.Employee;
-
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContexts;

@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import com.fleet.exception.EmployeeNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +20,13 @@ public class EmployeeServiceImpl implements  EmployeeService{
     EmployeeRepository repository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Employee> findAll() {
         return repository.findAll(); //No business logic required
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Employee findOne(String empId) {
         Employee employee = repository.findOne(empId);
         //Business Logic here
@@ -36,19 +38,19 @@ public class EmployeeServiceImpl implements  EmployeeService{
         }
     }
 
-    @Override
+
     @Transactional
     public Employee create(Employee employee) {
         return null;
     }
 
-    @Override
+
     @Transactional
     public Employee update(String id, Employee employee) {
         return null;
     }
 
-    @Override
+
     public void delete(String empId) {
 
     }
