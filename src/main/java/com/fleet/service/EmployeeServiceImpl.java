@@ -6,13 +6,11 @@ import com.fleet.exception.EmployeeAlreadyExists;
 import com.fleet.exception.EmployeeNotFoundException;
 import com.fleet.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import com.fleet.exception.EmployeeNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements  EmployeeService{
@@ -20,45 +18,55 @@ public class EmployeeServiceImpl implements  EmployeeService{
     @Autowired //can also use constructor based dependency injection
     EmployeeRepository repository;
 
-    @Override
+
     @Transactional(readOnly = true)
     public List<Employee> findAll() {
-        return repository.findAll(); //No business logic required
+        return (List<Employee>) repository.findAll(); //No business logic required
     }
 
-    @Override
+
     @Transactional(readOnly = true)
     public Employee findOne(String empId) {
-        Employee employee = repository.findOne(empId);
+        Optional<Employee> employee = repository.findById(empId);
         //Business Logic here
-        if(employee == null){
+        if(!employee.isPresent()){
             throw new EmployeeNotFoundException("Employee of id: "+ empId+ "NOT FOUND");
         }
         else {
-            return employee;
+            return employee.get();
         }
     }
 
 
     @Transactional
     public Employee create(Employee employee) {
-        List<Employee> existing = repository.findByEmail(employee.getEmail());
-        System.out.println("our results: " + existing );
-        if (existing.size() != 0){
-            System.out.println("exception time!");
-            throw new EmployeeAlreadyExists("Employee with email"+  employee.getEmail() + "already exists: "  );
+        Optional<Employee> existing = repository.findByEmail(employee.getEmail());
+
+        if (existing.isPresent()){
+            System.out.println("exceptin time!");
+            throw new EmployeeAlreadyExists("Employee with email" + employee.getEmail() + "already exists: ");
         }
-        return repository.create(employee);
+        return repository.save(employee);
     }
 
 
     @Transactional
     public Employee update(String id, Employee employee) {
-        return null;
+        Optional<Employee> emp = repository.findById(employee.getId());
+        if(!emp.isPresent()){
+
+            throw new EmployeeNotFoundException("Employee does not exist exists with id: "+ employee.getId());
+        }
+        return repository.save(employee);
     }
 
 
     public void delete(String empId) {
+        Optional<Employee> emp = repository.findById(empId);
+        if(!emp.isPresent()){
+            throw new EmployeeNotFoundException("Employee does not exist exists with id: "+ empId);
+        }
+        repository.delete(emp.get());
 
     }
 }
